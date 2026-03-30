@@ -1,4 +1,4 @@
-# WiFiKit - Wi-Fi 开发套件
+# WiFiKit - Wi-Fi 开发套件库
 
 <div align="center">
   <img src="wifi-kit-logo.svg" width="500" alt="wifi-kit-logo">
