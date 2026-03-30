@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zt.wifi">
+
+    <!-- 允许应用使用网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许访问网络状态（例如判断是否连接到 Wi-Fi 或移动数据网络） -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 访问 Wi-Fi 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 更改 Wi-Fi 状态，如开启/关闭WiFi、连接指定WiFi -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- 粗略位置权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 精确位置权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+</manifest>
