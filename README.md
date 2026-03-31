@@ -47,13 +47,13 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 ```groovy
 dependencies {
-    implementation 'com.github.starseaway:wifikit:1.2.0'
+    implementation 'com.github.starseaway:wifikit:1.2.1'
 }
 ```
 
 ```kotlin
 dependencies {
-    implementation("com.github.starseaway:wifikit:1.2.0")
+    implementation("com.github.starseaway:wifikit:1.2.1")
 }
 ```
 
