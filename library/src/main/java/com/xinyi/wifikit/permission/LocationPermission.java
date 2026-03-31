@@ -33,10 +33,18 @@ public class LocationPermission {
     private static final int REQUEST_CODE = 1001;
 
     /**
-     * 检查并申请定位相关权限
+     * 检查定位权限，未授权则发起请求
+     *
+     * <p> 若全部已授权，直接回调 callback.onGranted()，否则调用 requestPermissions 弹出系统授权框 </p>
+     *
+     * <p> 注意事项：</p>
+     * <ul>
+     *     <li> 该方法只负责发起权限请求，不处理用户拒绝或 “永久拒绝” 的情况 </li>
+     *     <li> 调用方需在 {@code onRequestPermissionsResult()} 中自行处理结果并决定是否再次请求或引导用户到设置页 </li>
+     * </ul>
      *
      * @param activity 当前 Activity
-     * @param callback 全部权限授予后的回调
+     * @param callback 全部权限已授予时的回调（仅在无需申请时触发）
      */
     public static void checkAndRequestPermissions(Activity activity, PermissionCallback callback) {
         List<String> denied = new ArrayList<>();

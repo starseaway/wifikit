@@ -76,26 +76,48 @@ class AppApplication : Application() {
 
 ## 四、快速开始
 
-### 1. 先加权限
+### 1. 检查权限
 
-在 AndroidManifest.xml 中声明基础权限：
-
-```xml
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-```
-
-> 如果你要在 Android 10+ 连接 Wi-Fi，通常还需要结合运行时定位权限和系统定位开关一起处理。
-
-### 2. 检查权限
+> 如果你要在 Android 10+ 连接 Wi-Fi，通常还需要结合运行时定位权限和系统定位开关一起处理
+> 若全部已授权，会直接回调 onGranted() 方法，否则内部会调用 requestPermissions 弹出系统授权框。
 
 ```kotlin
+// 检查定位权限，未授权则发起请求
 LocationPermission.checkAndRequestPermissions(activity, object : PermissionCallback {
     override fun onGranted() {
         // 权限已就绪，可以继续操作 Wi-Fi
     }
 })
+```
+
+**注意事项：**
+- 该方法只负责发起权限请求，不处理用户拒绝或 “永久拒绝” 的情况。
+- 调用方需在 activity 里重写 onRequestPermissionsResult() 中自行处理结果并决定是否再次请求或引导用户到设置页
+
+```kotlin
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == REQUEST_CODE) {
+        val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+
+        if (allGranted) {
+            // 全部权限通过
+            mPermissionCallback.onGranted()
+        } else {
+            // 是否存在“永久拒绝”
+            val permanentlyDenied = permissions.any { perm ->
+                ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED &&
+                !ActivityCompat.shouldShowRequestPermissionRationale(this, perm)
+            }
+
+            if (permanentlyDenied) {
+                // 引导去设置页
+            } else {
+                // 普通拒绝
+            }
+        }
+    }
+}
 ```
 
 也可以先判断定位服务是否开启：
@@ -104,7 +126,7 @@ LocationPermission.checkAndRequestPermissions(activity, object : PermissionCallb
 val enabled = LocationPermission.isLocationEnabled(context)
 ```
 
-### 3. 扫描附近 Wi-Fi
+### 2. 扫描附近 Wi-Fi
 
 ```kotlin
 val scanner = WifiScanner()
@@ -140,7 +162,7 @@ scanner.setFilter { result: ScanResult ->
 }
 ```
 
-### 4. 连接指定 Wi-Fi
+### 3. 连接指定 Wi-Fi
 
 ```kotlin
 val connector = WifiConnector()
@@ -159,7 +181,7 @@ connector.connect("WifiName", "WifiPassword", object : ConnectCallback {
 - Android 10 及以上：基于 NetworkSpecifier + NetworkRequest 实现
 - Android 9 及以下：基于 WifiConfiguration 实现
 
-### 5. 获取 Wi-Fi 信息
+### 4. 获取 Wi-Fi 信息
 
 _未连接时返回 null_
 
@@ -199,7 +221,7 @@ val mask = WifiInfoHelper.getSubnetMask()
 val dhcp = WifiInfoHelper.getDhcpInfoSummary()
 ```
 
-### 6. 判断信号等级和安全类型
+### 5. 判断信号等级和安全类型
 
 - 信号等级：
 
@@ -220,7 +242,7 @@ val wifiIcon = level.toIconResources()
 val type = WifiSecurityAnalyzer.analyze(scanResult)
 ```
 
-### 7. 监听 Wi-Fi 状态变化
+### 6. 监听 Wi-Fi 状态变化
 
 ```kotlin
 val observer = WifiStateObserver()
