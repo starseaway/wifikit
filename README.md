@@ -4,9 +4,9 @@
   <img src="wifi-kit-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![API](https://img.shields.io/badge/API-19%2B-brightgreen)
-![Version](https://img.shields.io/badge/version-1.2.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.1-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
+![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
 > 📡 A lightweight Android Wi-Fi toolkit  
 > 轻量级 Android Wi-Fi 管理库，适用于 Wi-Fi 扫描、设备配网、网络诊断等场景。
