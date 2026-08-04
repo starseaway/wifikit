@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -27,7 +27,7 @@ WiFiBridge 对 Android 原生 Wi-Fi 能力进行了统一桥接与封装；
 - 扫描附近 Wi-Fi，支持结果过滤
 - 连接 / 断开指定 Wi-Fi（自动适配系统版本）
 - 获取连接信息（SSID、BSSID、IP、网关、DNS、频率、信号强度、安全类型等）
-- 监听 Wi-Fi 状态变化（开关 / 连接 / 断开）
+- 监听 Wi-Fi 状态变化（开关 / 连接 / 断开，回调携带连接信息）
 - 封装定位权限检查与申请
 
 ---
@@ -55,26 +55,11 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 
 ```groovy
-implementation 'com.github.starseaway:wifi-bridge:2.0.0'
+implementation 'com.github.starseaway:wifi-bridge:2.1.0'
 ```
 
 ```kotlin
-implementation("com.github.starseaway:wifi-bridge:2.0.0")
-```
-
-### 3. 初始化模块
-
-> 请在 Application 中初始化 WiFiKit，否则部分功能无法使用
-
-```kotlin
-class AppApplication : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        WiFiKit.init(this)
-    }
-}
+implementation("com.github.starseaway:wifi-bridge:2.1.0")
 ```
 
 ---
@@ -256,12 +241,13 @@ observer.register(object : WifiStateCallback {
         // Wi-Fi 开关状态变化
     }
 
-    override fun onWifiConnected() {
-        // 已连接 Wi-Fi
+    override fun onWifiConnected(info: WifiConnectionInfo?) {
+        // 已连接 Wi-Fi，可直接使用 ssid / bssid / rssi 等信息
+        // info?.ssid
     }
 
-    override fun onWifiDisconnected() {
-        // 已断开 Wi-Fi
+    override fun onWifiDisconnected(info: WifiConnectionInfo?) {
+        // 已断开 Wi-Fi，info 为断开前的连接快照
     }
 })
 ```
@@ -275,6 +261,12 @@ observer.unregister()
 ---
 
 ## 五、版本变更记录
+
+### V2.1.0 (2026-08-04)
+- 📦 deps: 升级安卓设备状态核心库版本至 V3.0.0
+- ✨ feat: 状态监听回调补充当前连接信息
+- 🦄 refactor: 优化 Wi-Fi 连接状态监听实现
+- 🦄 refactor: 优化 Wi-Fi 扫描任务调度方式
 
 ### V2.0.1 (2026-07-02)
 - 🦄 refactor: 调整 Wi-Fi 状态监听方法命名

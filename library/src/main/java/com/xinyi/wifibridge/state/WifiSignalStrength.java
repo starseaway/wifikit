@@ -12,11 +12,11 @@ import com.xinyi.wifibridge.R;
  * <p>
  *    Android 中 Wi-Fi 信号强度以 RSSI（Received Signal Strength Indicator）为单位，值越小信号越弱。
  * <p>
- *
- * <a href="https://developer.android.com/reference/android/net/wifi/ScanResult#level">官方文档参考链接</a>
- * <a href="https://www.netspotapp.com/wifi-signal-strength/">NetSpot 的官方指南</a>
- * <a href="https://www.metageek.com/training/resources/understanding-rssi/">MetaGeek 对 RSSI 和 dBm 的详细解释</a>
- * 一般范围约为 -30 dBm（极强）到 -100 dBm（极弱）。
+ *   <a href="https://developer.android.com/reference/android/net/wifi/ScanResult#level">官方文档参考链接</a>
+ *   <a href="https://www.netspotapp.com/wifi-signal-strength/">NetSpot 的官方指南</a>
+ *   <a href="https://www.metageek.com/training/resources/understanding-rssi/">MetaGeek 对 RSSI 和 dBm 的详细解释</a>
+ *   </br>
+ *   一般范围约为 -30 dBm（极强）到 -100 dBm（极弱）
  * </p>
  *
  * @author 新一

@@ -22,14 +22,12 @@ public interface ScannerCallback {
     /**
      * 扫描超时时的回调（默认空实现）
      */
-    default void onTimeout() {
-    }
+    default void onTimeout() { }
 
     /**
      * 扫描失败时的回调（默认空实现）
      *
      * @param reason 失败原因描述
      */
-    default void onFailure(String reason) {
-    }
+    default void onFailure(String reason) { }
 }

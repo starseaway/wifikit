@@ -4,7 +4,9 @@ import android.net.wifi.ScanResult;
 import android.text.TextUtils;
 
 /**
- * Wi-Fi 安全类型分析器，用于分析 Wi-Fi 热点的加密方式（WEP、WPA/WPA2/WPA3、开放等）。
+ * Wi-Fi 安全类型分析器
+ *
+ * <p> 用于分析 Wi-Fi 热点的加密方式（WEP、WPA/WPA2/WPA3、开放等） </p>
  *
  * @author 新一
  * @date 2025/5/29 14:46

@@ -8,9 +8,9 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.RequiresPermission;
-import androidx.annotation.WorkerThread;
 
 import com.xinyi.device.DeviceContext;
 import com.xinyi.wifibridge.WiFiBridge;
@@ -34,9 +34,9 @@ public class WifiScanner {
     private static final long DEFAULT_TIMEOUT_MS = 10000;
 
     /**
-     * 线程处理器，用于处理超时任务和循环扫描任务
+     * 主线程 Handler，用于超时任务和循环扫描调度
      */
-    private Handler mHandler;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     /**
      * 扫描超时任务
@@ -65,18 +65,13 @@ public class WifiScanner {
     }
 
     /**
-     * 执行单次 Wi-Fi 扫描，支持结果过滤与超时处理。
+     * 执行单次 Wi-Fi 扫描，支持结果过滤与超时处理
      *
      * @param callback 扫描结果回调接口
      */
-    @WorkerThread
+    @SuppressWarnings("deprecation")
     public void scanWifi(ScannerCallback callback) {
         IntentFilter intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-
-        // 创建 Handler，默认获取当前线程上的Looper对象，建议在WorkerThread中使用
-        if (mHandler == null) {
-            mHandler = new Handler();
-        }
 
         // 创建广播接收器实例，监听扫描结果
         WifiScannerReceiver receiver = new WifiScannerReceiver(callback, this);
@@ -131,9 +126,6 @@ public class WifiScanner {
      * @param timeout 超时时间，毫秒
      */
     public void addTimeout(Runnable runnable, long timeout) {
-        if (mHandler == null) {
-            return;
-        }
         mHandler.postDelayed(runnable, timeout);
     }
 
@@ -141,7 +133,7 @@ public class WifiScanner {
      * 取消超时任务
      */
     public void cancelTimeout() {
-        if (mHandler == null || mTimeoutRunnable == null) {
+        if (mTimeoutRunnable == null) {
             return;
         }
         mHandler.removeCallbacks(mTimeoutRunnable);
@@ -176,7 +168,6 @@ public class WifiScanner {
      * @param intervalMs 每次扫描之间的间隔时间（毫秒）
      * @param callback 扫描结果回调接口
      */
-    @WorkerThread
     public void startLoopScanner(long intervalMs, ScannerCallback callback) {
         if (intervalMs <= 0) {
             throw new IllegalArgumentException("间隔时间必须大于 0");
@@ -191,9 +182,6 @@ public class WifiScanner {
 
     /**
      * 停止循环扫描。
-     * <p>
-     * 建议在生命周期结束时主动调用，以避免线程泄漏。
-     * </p>
      */
     public void stopLoopScan() {
         if (!isLoopScanner) {
@@ -201,6 +189,8 @@ public class WifiScanner {
         }
         isLoopScanner = false;
         cancelTimeout();
+        // 取消尚未执行的下一次循环扫描
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     /**
@@ -318,7 +308,7 @@ public class WifiScanner {
             if (scanner == null) {
                 return;
             }
-            if (scanner.isLoopScanner() && scanner.mHandler != null) {
+            if (scanner.isLoopScanner()) {
                 // 继续循环扫描
                 scanner.mHandler.postDelayed(() -> scanner.scanWifi(this), mIntervalMs);
             }

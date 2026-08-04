@@ -1,6 +1,5 @@
 package com.xinyi.wifibridge;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -21,24 +20,6 @@ public class WiFiBridge {
      * 系统的 Wi-Fi 管理器
      */
     private static WifiManager mWifiManager;
-
-    /**
-     * 初始化全局上下文
-     *
-     * @param mainContext 上下文
-     */
-    public static void init(Context mainContext) {
-        DeviceContext.init(mainContext);
-    }
-
-    /**
-     * 获取全局上下文
-     *
-     * @return 全局上下文
-     */
-    public static Application getApplication() {
-        return DeviceContext.getApplication();
-    }
 
     /**
      * 获取 Wi-Fi 管理器
