@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.1-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -262,7 +262,7 @@ connectionMonitor.unregister()
 
 ## 五、版本变更记录
 
-### V2.2.0 (2026-08-12)
+### V2.2.1 (2026-08-12)
 - ✨ feat: 拆分 Wi-Fi 开关状态与连接状态监听
 - 🦄 refactor: 弃用原有合一式状态监听器
 
