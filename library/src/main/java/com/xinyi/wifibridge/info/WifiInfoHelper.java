@@ -83,6 +83,20 @@ public class WifiInfoHelper {
     }
 
     /**
+     * 读取当前 Wi-Fi 快照
+     *
+     * @return Wi-Fi 快照，未连接返回 null
+     */
+    @Nullable
+    public static WifiSnapshot getWifiSnapshot() {
+        WifiInfo info = getConnectionInfo();
+        if (info == null || info.getNetworkId() == -1) {
+            return null;
+        }
+        return WifiSnapshot.from(info);
+    }
+
+    /**
      * 获取当前连接的 SSID（Wi-Fi 名称）
      *
      * @return SSID，未连接返回 null

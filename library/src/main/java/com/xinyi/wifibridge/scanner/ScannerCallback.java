@@ -2,6 +2,8 @@ package com.xinyi.wifibridge.scanner;
 
 import android.net.wifi.ScanResult;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface ScannerCallback {
      *
      * @param results 扫描到的 Wi-Fi 列表
      */
-    void onResult(List<ScanResult> results);
+    void onResult(@NonNull List<ScanResult> results);
 
     /**
      * 扫描超时时的回调（默认空实现）
@@ -29,5 +31,5 @@ public interface ScannerCallback {
      *
      * @param reason 失败原因描述
      */
-    default void onFailure(String reason) { }
+    default void onFailure(@NonNull String reason) { }
 }

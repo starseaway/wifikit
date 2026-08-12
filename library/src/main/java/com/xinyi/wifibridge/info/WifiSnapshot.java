@@ -151,7 +151,7 @@ public class WifiSnapshot {
     @NonNull
     @Override
     public String toString() {
-        return "WifiConnectionInfo{" +
+        return "WifiSnapshot{" +
                 "ssid='" + ssid + '\'' +
                 ", bssid='" + bssid + '\'' +
                 ", networkId=" + networkId +

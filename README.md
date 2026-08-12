@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.2.2-blue)
+![Version](https://img.shields.io/badge/version-2.3.0-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -55,11 +55,11 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 
 ```groovy
-implementation 'com.github.starseaway:wifi-bridge:2.2.2'
+implementation 'com.github.starseaway:wifi-bridge:2.3.0'
 ```
 
 ```kotlin
-implementation("com.github.starseaway:wifi-bridge:2.2.2")
+implementation("com.github.starseaway:wifi-bridge:2.3.0")
 ```
 
 ---
@@ -173,6 +173,13 @@ connector.connect("WifiName", "WifiPassword", object : ConnectCallback {
 
 ### 4. 获取 Wi-Fi 信息
 
+一键读取当前快照：
+
+```kotlin
+// 未连接时返回 null
+val snapshot: WifiSnapshot? = WifiInfoHelper.getWifiSnapshot()
+```
+
 轻量状态判断：
 
 ```kotlin
@@ -274,6 +281,9 @@ connectionMonitor.unregister()
 ---
 
 ## 五、版本变更记录
+
+### V2.3.0 (2026-08-12)
+- ✨ feat: 新增当前 Wi-Fi 快照读取
 
 ### V2.2.2 (2026-08-12)
 - ✨ feat: 补充 Wi-Fi 模块可用性等轻量状态判断

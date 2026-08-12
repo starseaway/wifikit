@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 
 import com.xinyi.device.DeviceContext;
@@ -144,8 +145,8 @@ public class WifiScanner {
      *
      * @param results 扫描结果列表，非空
      */
-    public void filterScanResults(List<ScanResult> results) {
-        if (results == null || results.isEmpty() || mFilter == null) {
+    public void filterScanResults(@NonNull List<ScanResult> results) {
+        if (results.isEmpty() || mFilter == null) {
             return;
         }
 
@@ -253,7 +254,7 @@ public class WifiScanner {
             scanner.cancelTimeout();
 
             // 获取扫描结果
-            List<ScanResult> results = WiFiBridge.getWifiManager().getScanResults();
+            @NonNull List<ScanResult> results = WiFiBridge.getWifiManager().getScanResults();
             // 移除所有被过滤掉的元素
             scanner.filterScanResults(results);
             // 通知回调
@@ -300,7 +301,7 @@ public class WifiScanner {
          * @param results 扫描结果列表
          */
         @Override
-        public void onResult(List<ScanResult> results) {
+        public void onResult(@NonNull List<ScanResult> results) {
             // 通知回调
             mScannerCallback.onResult(results);
             // 获取扫描实例
@@ -329,7 +330,7 @@ public class WifiScanner {
          * @param reason 失败原因
          */
         @Override
-        public void onFailure(String reason) {
+        public void onFailure(@NonNull String reason) {
             setLoopScanner(false);
             mScannerCallback.onFailure(reason);
         }
