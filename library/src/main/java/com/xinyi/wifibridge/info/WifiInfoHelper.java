@@ -18,7 +18,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.xinyi.device.DeviceContext;
 import com.xinyi.wifibridge.WiFiBridge;
-import com.xinyi.wifibridge.monitor.WifiAdapterState;
+import com.xinyi.wifibridge.monitor.WifiState;
 
 import java.util.List;
 
@@ -67,18 +67,18 @@ public class WifiInfoHelper {
     }
 
     /**
-     * 当前 Wi-Fi 模块开关状态
+     * 当前 Wi-Fi 开关状态
      */
     @NonNull
-    public static WifiAdapterState getAdapterState() {
+    public static WifiState getState() {
         WifiManager wifiManager = getWifiManager();
         if (wifiManager == null) {
-            return WifiAdapterState.UNKNOWN;
+            return WifiState.UNKNOWN;
         }
         try {
-            return WifiAdapterState.fromWifiManager(wifiManager.getWifiState());
+            return WifiState.from(wifiManager.getWifiState());
         } catch (Exception ignored) {
-            return WifiAdapterState.UNKNOWN;
+            return WifiState.UNKNOWN;
         }
     }
 

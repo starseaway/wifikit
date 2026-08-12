@@ -52,7 +52,7 @@ public final class WifiStateMonitor {
                     return;
                 }
                 int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
-                mListener.onWifiStateChanged(WifiAdapterState.fromWifiManager(state));
+                mListener.onWifiStateChanged(WifiState.from(state));
             }
         };
         IntentFilter filter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);

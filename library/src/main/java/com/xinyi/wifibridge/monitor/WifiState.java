@@ -3,35 +3,35 @@ package com.xinyi.wifibridge.monitor;
 import android.net.wifi.WifiManager;
 
 /**
- * Wi-Fi 模块开关状态
+ * Wi-Fi 开关状态
  *
  * @author 新一
  * @date 2026/8/12 11:52
  */
-public enum WifiAdapterState {
+public enum WifiState {
 
     /**
      * 已关闭
      */
-    DISABLED,
-
-    /**
-     * 正在关闭
-     */
-    DISABLING,
-
-    /**
-     * 已开启
-     */
-    ENABLED,
+    OFF,
 
     /**
      * 正在开启
      */
-    ENABLING,
+    TURNING_ON,
 
     /**
-     * 未知或不可用
+     * 已开启
+     */
+    ON,
+
+    /**
+     * 正在关闭
+     */
+    TURNING_OFF,
+
+    /**
+     * 未知状态
      */
     UNKNOWN;
 
@@ -40,16 +40,17 @@ public enum WifiAdapterState {
      *
      * @param state Wi-Fi 状态常量
      */
-    public static WifiAdapterState fromWifiManager(int state) {
+    public static WifiState from(int state) {
         switch (state) {
             case WifiManager.WIFI_STATE_DISABLED:
-                return DISABLED;
-            case WifiManager.WIFI_STATE_DISABLING:
-                return DISABLING;
-            case WifiManager.WIFI_STATE_ENABLED:
-                return ENABLED;
+                return OFF;
             case WifiManager.WIFI_STATE_ENABLING:
-                return ENABLING;
+                return TURNING_ON;
+            case WifiManager.WIFI_STATE_ENABLED:
+                return ON;
+            case WifiManager.WIFI_STATE_DISABLING:
+                return TURNING_OFF;
+            case WifiManager.WIFI_STATE_UNKNOWN:
             default:
                 return UNKNOWN;
         }

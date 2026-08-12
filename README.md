@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.3.0-blue)
+![Version](https://img.shields.io/badge/version-2.4.0-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -55,11 +55,11 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 
 ```groovy
-implementation 'com.github.starseaway:wifi-bridge:2.3.0'
+implementation 'com.github.starseaway:wifi-bridge:2.4.0'
 ```
 
 ```kotlin
-implementation("com.github.starseaway:wifi-bridge:2.3.0")
+implementation("com.github.starseaway:wifi-bridge:2.4.0")
 ```
 
 ---
@@ -192,8 +192,8 @@ val enabled = WifiInfoHelper.isEnabled()
 // 是否已连接到 Wi-Fi
 val connected = WifiInfoHelper.isConnected()
 
-// 当前模块开关状态
-val state = WifiInfoHelper.getAdapterState()
+// 当前开关状态
+val state = WifiInfoHelper.getState()
 ```
 
 连接详情（未连接时多数返回 null）：
@@ -281,6 +281,9 @@ connectionMonitor.unregister()
 ---
 
 ## 五、版本变更记录
+
+### V2.4.0 (2026-08-12)
+- 🦄 refactor: 调整 Wi-Fi 开关状态语义，按开/关描述而非启用/禁用
 
 ### V2.3.0 (2026-08-12)
 - ✨ feat: 新增当前 Wi-Fi 快照读取

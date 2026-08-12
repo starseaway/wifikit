@@ -15,5 +15,5 @@ public interface WifiStateListener {
      *
      * @param state 最新状态
      */
-    void onWifiStateChanged(@NonNull WifiAdapterState state);
+    void onWifiStateChanged(@NonNull WifiState state);
 }
