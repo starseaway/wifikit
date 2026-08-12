@@ -2,26 +2,28 @@ package com.xinyi.wifibridge.info;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.text.format.Formatter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 
+import com.xinyi.device.DeviceContext;
 import com.xinyi.wifibridge.WiFiBridge;
+import com.xinyi.wifibridge.monitor.WifiAdapterState;
 
 import java.util.List;
 
 /**
- * Wi-Fi 信息获取工具，用于当前 Wi-Fi 的详细连接信息查看。
- *
- * <p>
- *   所有方法都基于系统的 {@link android.net.wifi.WifiManager} 和当前连接状态去获取的。
- * </p>
+ * Wi-Fi 信息查询
  *
  * @author 新一
  * @date 2025/5/29 10:01
@@ -29,12 +31,64 @@ import java.util.List;
 public class WifiInfoHelper {
 
     /**
+     * 设备是否支持 Wi-Fi
+     */
+    public static boolean isWifiSupported() {
+        return DeviceContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI)
+                && DeviceContext.getWifiManager() != null;
+    }
+
+    /**
+     * Wi-Fi 是否已开启
+     */
+    public static boolean isEnabled() {
+        WifiManager wifiManager = getWifiManager();
+        if (wifiManager == null) {
+            return false;
+        }
+        try {
+            return wifiManager.isWifiEnabled();
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    /**
+     * 是否已连接到 Wi-Fi
+     *
+     * <p> Wi-Fi 未开启或未连接时返回 false </p>
+     */
+    public static boolean isConnected() {
+        if (!isEnabled()) {
+            return false;
+        }
+        WifiInfo info = getConnectionInfo();
+        return info != null && info.getNetworkId() != -1;
+    }
+
+    /**
+     * 当前 Wi-Fi 模块开关状态
+     */
+    @NonNull
+    public static WifiAdapterState getAdapterState() {
+        WifiManager wifiManager = getWifiManager();
+        if (wifiManager == null) {
+            return WifiAdapterState.UNKNOWN;
+        }
+        try {
+            return WifiAdapterState.fromWifiManager(wifiManager.getWifiState());
+        } catch (Exception ignored) {
+            return WifiAdapterState.UNKNOWN;
+        }
+    }
+
+    /**
      * 获取当前连接的 SSID（Wi-Fi 名称）
      *
      * @return SSID，未连接返回 null
      */
     public static String getCurrentSsid() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null && info.getSupplicantState() == SupplicantState.COMPLETED) {
             return info.getSSID().replace("\"", "");
         }
@@ -47,7 +101,7 @@ public class WifiInfoHelper {
      * @return true 表示是隐藏 Wi-Fi，false 表示公开 Wi-Fi 或未连接
      */
     public static boolean isHiddenSSID() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getHiddenSSID();
         }
@@ -87,7 +141,7 @@ public class WifiInfoHelper {
      * @return 网络 ID，失败时返回 -1
      */
     public static int getNetworkId() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getNetworkId();
         }
@@ -100,7 +154,7 @@ public class WifiInfoHelper {
      * @return BSSID，未连接返回 null
      */
     public static String getCurrentBssid() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getBSSID();
         }
@@ -113,7 +167,7 @@ public class WifiInfoHelper {
      * @return 信号强度（单位 dBm），未连接返回 Integer.MIN_VALUE
      */
     public static int getCurrentSignalLevel() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getRssi();
         }
@@ -126,7 +180,7 @@ public class WifiInfoHelper {
      * @return IP 地址，未连接返回 null
      */
     public static String getCurrentIpAddress() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             int ip = info.getIpAddress();
             return Formatter.formatIpAddress(ip);
@@ -141,7 +195,7 @@ public class WifiInfoHelper {
      */
     @SuppressLint("HardwareIds")
     public static String getMacAddress() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getMacAddress();
         }
@@ -155,7 +209,7 @@ public class WifiInfoHelper {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static int getFrequency() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getFrequency();
         }
@@ -171,7 +225,7 @@ public class WifiInfoHelper {
      */
     @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE})
     public static int getFrequencyLegacy() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info == null) {
             return -1;
         }
@@ -232,7 +286,7 @@ public class WifiInfoHelper {
      * @return 速度（单位 Mbps），未连接返回 -1
      */
     public static int getLinkSpeed() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
+        WifiInfo info = getConnectionInfo();
         if (info != null) {
             return info.getLinkSpeed();
         }
@@ -243,11 +297,10 @@ public class WifiInfoHelper {
      * 判断设备是否已连接到 Wi-Fi 网络
      *
      * @return 如果设备已连接到 Wi-Fi 网络，则返回 true；否则返回 false。
+     * @see #isConnected()
      */
     public static boolean isWifiConnected() {
-        WifiInfo info = WiFiBridge.getWifiManager().getConnectionInfo();
-        // 如果 wifiInfo 不为空且当前已连接的网络 ID 非 -1，表示已连接 Wi-Fi
-        return info != null && info.getNetworkId() != -1;
+        return isConnected();
     }
 
     /**
@@ -320,5 +373,33 @@ public class WifiInfoHelper {
                 ", dns2=" + Formatter.formatIpAddress(info.dns2) +
                 ", server=" + Formatter.formatIpAddress(info.serverAddress) +
                 ", leaseDuration=" + info.leaseDuration;
+    }
+
+    /**
+     * 获取 Wi-Fi 管理器
+     *
+     * @return Wi-Fi 管理器，未连接返回 null
+     */
+    @Nullable
+    private static WifiManager getWifiManager() {
+        return DeviceContext.getWifiManager();
+    }
+
+    /**
+     * 获取当前连接的 Wi-Fi 信息
+     *
+     * @return Wi-Fi 信息，未连接返回 null
+     */
+    @Nullable
+    private static WifiInfo getConnectionInfo() {
+        WifiManager wifiManager = getWifiManager();
+        if (wifiManager == null) {
+            return null;
+        }
+        try {
+            return wifiManager.getConnectionInfo();
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }

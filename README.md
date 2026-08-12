@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.2.1-blue)
+![Version](https://img.shields.io/badge/version-2.2.2-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -55,11 +55,11 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 
 ```groovy
-implementation 'com.github.starseaway:wifi-bridge:2.2.0'
+implementation 'com.github.starseaway:wifi-bridge:2.2.2'
 ```
 
 ```kotlin
-implementation("com.github.starseaway:wifi-bridge:2.2.0")
+implementation("com.github.starseaway:wifi-bridge:2.2.2")
 ```
 
 ---
@@ -173,7 +173,23 @@ connector.connect("WifiName", "WifiPassword", object : ConnectCallback {
 
 ### 4. 获取 Wi-Fi 信息
 
-_未连接时返回 null_
+轻量状态判断：
+
+```kotlin
+// 设备是否支持 Wi-Fi
+val supported = WifiInfoHelper.isWifiSupported()
+
+// Wi-Fi 是否已开启
+val enabled = WifiInfoHelper.isEnabled()
+
+// 是否已连接到 Wi-Fi
+val connected = WifiInfoHelper.isConnected()
+
+// 当前模块开关状态
+val state = WifiInfoHelper.getAdapterState()
+```
+
+连接详情（未连接时多数返回 null）：
 
 ```kotlin
 // 当前连接的 Wi-Fi 名称（SSID）
@@ -190,9 +206,6 @@ val rssi = WifiInfoHelper.getCurrentSignalLevel()
 
 // 当前链路速率（单位 Mbps，表示理论传输速率）
 val speed = WifiInfoHelper.getLinkSpeed()
-
-// 是否已连接到 Wi-Fi（基于 networkId 判断）
-val connected = WifiInfoHelper.isWifiConnected()
 ```
 
 也可以读取更详细的信息：
@@ -261,6 +274,9 @@ connectionMonitor.unregister()
 ---
 
 ## 五、版本变更记录
+
+### V2.2.2 (2026-08-12)
+- ✨ feat: 补充 Wi-Fi 模块可用性等轻量状态判断
 
 ### V2.2.1 (2026-08-12)
 - ✨ feat: 拆分 Wi-Fi 开关状态与连接状态监听

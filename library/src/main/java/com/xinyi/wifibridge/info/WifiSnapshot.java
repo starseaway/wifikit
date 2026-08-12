@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
  * @author 新一
  * @date 2026/8/4 9:20
  */
-public class WifiConnectionInfo {
+public class WifiSnapshot {
 
     /**
      * Wi-Fi 名称
@@ -58,8 +58,8 @@ public class WifiConnectionInfo {
      */
     private final boolean hiddenSsid;
 
-    private WifiConnectionInfo(String ssid, String bssid, int networkId, int rssi,
-                               int linkSpeed, int frequency, String ipAddress, boolean hiddenSsid) {
+    private WifiSnapshot(String ssid, String bssid, int networkId, int rssi,
+                         int linkSpeed, int frequency, String ipAddress, boolean hiddenSsid) {
         this.ssid = ssid;
         this.bssid = bssid;
         this.networkId = networkId;
@@ -76,7 +76,7 @@ public class WifiConnectionInfo {
      * @param wifiInfo 系统 Wi-Fi 信息，为空时返回 null
      */
     @NonNull
-    public static WifiConnectionInfo from(@NonNull WifiInfo wifiInfo) {
+    public static WifiSnapshot from(@NonNull WifiInfo wifiInfo) {
         String ssid = wifiInfo.getSSID();
         if (ssid != null) {
             ssid = ssid.replace("\"", "");
@@ -101,7 +101,7 @@ public class WifiConnectionInfo {
             ipAddress = Formatter.formatIpAddress(ip);
         }
 
-        return new WifiConnectionInfo(
+        return new WifiSnapshot(
                 ssid,
                 bssid,
                 wifiInfo.getNetworkId(),

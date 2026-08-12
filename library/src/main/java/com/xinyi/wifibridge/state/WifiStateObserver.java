@@ -20,8 +20,9 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 import com.xinyi.device.DeviceContext;
-import com.xinyi.wifibridge.info.WifiConnectionInfo;
+import com.xinyi.wifibridge.info.WifiSnapshot;
 import com.xinyi.wifibridge.info.WifiInfoHelper;
+import com.xinyi.wifibridge.monitor.WifiConnectionMonitor;
 import com.xinyi.wifibridge.monitor.WifiStateMonitor;
 
 /**
@@ -47,7 +48,7 @@ public class WifiStateObserver {
     /**
      * 最近一次已连接的 Wi-Fi 信息快照（断开时带回给调用方）
      */
-    private WifiConnectionInfo mLastConnectedInfo;
+    private WifiSnapshot mLastConnectedInfo;
 
     /**
      * 主线程 Handler
@@ -150,7 +151,7 @@ public class WifiStateObserver {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     WifiInfo wifiInfo = extractWifiInfo(capabilities);
                     if (wifiInfo != null) {
-                        WifiConnectionInfo info = WifiConnectionInfo.from(wifiInfo);
+                        WifiSnapshot info = WifiSnapshot.from(wifiInfo);
                         if (info.getSsid() != null) {
                             mLastConnectedInfo = info;
                         }
@@ -245,7 +246,7 @@ public class WifiStateObserver {
         if (wifiInfo == null) {
             return;
         }
-        WifiConnectionInfo info = WifiConnectionInfo.from(wifiInfo);
+        WifiSnapshot info = WifiSnapshot.from(wifiInfo);
         // 若系统尚未给出有效 SSID，再确认一次是否真的已连接
         if (info.getSsid() == null && !WifiInfoHelper.isWifiConnected()) {
             return;
@@ -260,7 +261,7 @@ public class WifiStateObserver {
      * 通知 Wi-Fi 已断开
      */
     private void notifyDisconnected() {
-        WifiConnectionInfo previous = mLastConnectedInfo;
+        WifiSnapshot previous = mLastConnectedInfo;
         mLastConnectedInfo = null;
         if (mStateCallback != null) {
             mStateCallback.onWifiDisconnected(previous);
@@ -319,13 +320,13 @@ public class WifiStateObserver {
          *
          * @param info 当前连接的 Wi-Fi 信息，获取失败时可能为 null
          */
-        void onWifiConnected(@Nullable WifiConnectionInfo info);
+        void onWifiConnected(@Nullable WifiSnapshot info);
 
         /**
          * Wi-Fi 断开连接
          *
          * @param info 断开前的 Wi-Fi 信息，未知时可能为 null
          */
-        void onWifiDisconnected(@Nullable WifiConnectionInfo info);
+        void onWifiDisconnected(@Nullable WifiSnapshot info);
     }
 }

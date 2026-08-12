@@ -2,7 +2,7 @@ package com.xinyi.wifibridge.monitor;
 
 import androidx.annotation.Nullable;
 
-import com.xinyi.wifibridge.info.WifiConnectionInfo;
+import com.xinyi.wifibridge.info.WifiSnapshot;
 
 /**
  * Wi-Fi 连接状态监听回调
@@ -18,5 +18,5 @@ public interface WifiConnectionListener {
      * @param connected 当前是否已连接 Wi-Fi
      * @param info 当前连接信息；未连接时为 null
      */
-    void onWifiConnectionChanged(boolean connected, @Nullable WifiConnectionInfo info);
+    void onWifiConnectionChanged(boolean connected, @Nullable WifiSnapshot info);
 }

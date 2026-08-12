@@ -19,7 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 import com.xinyi.device.DeviceContext;
-import com.xinyi.wifibridge.info.WifiConnectionInfo;
+import com.xinyi.wifibridge.info.WifiSnapshot;
 import com.xinyi.wifibridge.info.WifiInfoHelper;
 
 /**
@@ -56,7 +56,7 @@ public final class WifiConnectionMonitor {
     /**
      * 最近一次已连接信息（用于能力刷新）
      */
-    private WifiConnectionInfo mLastConnectedInfo;
+    private WifiSnapshot mLastConnectedInfo;
 
     /**
      * @param listener 连接回调
@@ -144,7 +144,7 @@ public final class WifiConnectionMonitor {
                 if (wifiInfo == null) {
                     return;
                 }
-                WifiConnectionInfo info = WifiConnectionInfo.from(wifiInfo);
+                WifiSnapshot info = WifiSnapshot.from(wifiInfo);
                 if (info.getSsid() != null) {
                     mLastConnectedInfo = info;
                 }
@@ -222,12 +222,12 @@ public final class WifiConnectionMonitor {
      * @param wifiInfo 系统 Wi-Fi 信息
      */
     private void notifyConnectionChanged(boolean connected, @Nullable WifiInfo wifiInfo) {
-        WifiConnectionInfo info = null;
+        WifiSnapshot info = null;
         if (connected) {
             if (wifiInfo == null) {
                 return;
             }
-            info = WifiConnectionInfo.from(wifiInfo);
+            info = WifiSnapshot.from(wifiInfo);
             // 若系统尚未给出有效 SSID，再确认一次是否真的已连接
             if (info.getSsid() == null && !WifiInfoHelper.isWifiConnected()) {
                 return;
