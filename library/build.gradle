@@ -52,5 +52,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // 设备工具包
-    implementation 'com.github.starseaway:device-core:3.0.0'
+    implementation 'com.github.starseaway:device-core:3.2.0'
 }

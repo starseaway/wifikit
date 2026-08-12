@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.xinyi.device.DeviceContext;
 import com.xinyi.wifibridge.info.WifiConnectionInfo;
 import com.xinyi.wifibridge.info.WifiInfoHelper;
+import com.xinyi.wifibridge.monitor.WifiStateMonitor;
 
 /**
  * Wi-Fi 状态监听器
@@ -33,7 +34,9 @@ import com.xinyi.wifibridge.info.WifiInfoHelper;
  *
  * @author 新一
  * @date 2025/5/29 14:11
+ * @deprecated 请改用 {@link WifiStateMonitor} 与 {@link WifiConnectionMonitor}
  */
+@Deprecated
 public class WifiStateObserver {
 
     /**
@@ -204,7 +207,6 @@ public class WifiStateObserver {
      *
      * @param network 网络，可为 null
      */
-    @SuppressWarnings("deprecation")
     @Nullable
     private WifiInfo resolveWifiInfo(@Nullable Network network) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && network != null) {

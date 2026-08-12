@@ -4,7 +4,7 @@
   <img src="wifi-bridge-logo.svg" width="500" alt="wifi-kit-logo">
 </div>
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.0-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![API](https://img.shields.io/badge/API-19%2B-brightgreen)
 
@@ -55,11 +55,11 @@ maven {
 ### 2. 在 `build.gradle` (Module 级) 中添加依赖：
 
 ```groovy
-implementation 'com.github.starseaway:wifi-bridge:2.1.0'
+implementation 'com.github.starseaway:wifi-bridge:2.2.0'
 ```
 
 ```kotlin
-implementation("com.github.starseaway:wifi-bridge:2.1.0")
+implementation("com.github.starseaway:wifi-bridge:2.2.0")
 ```
 
 ---
@@ -234,33 +234,37 @@ val type = WifiSecurityAnalyzer.analyze(scanResult)
 
 ### 6. 注册 Wi-Fi 状态变化监听
 
+开关状态与连接状态分开监听：
+
 ```kotlin
-val observer = WifiStateObserver()
-observer.register(object : WifiStateCallback {
-    override fun onWifiStateChanged(state: Int) {
-        // Wi-Fi 开关状态变化
-    }
+// Wi-Fi 开关状态
+val stateMonitor = WifiStateMonitor { state ->
+    // 开启 / 关闭 / 切换中
+}
 
-    override fun onWifiConnected(info: WifiConnectionInfo?) {
-        // 已连接 Wi-Fi，可直接使用 ssid / bssid / rssi 等信息
-        // info?.ssid
-    }
+// Wi-Fi 连接状态
+val connectionMonitor = WifiConnectionMonitor { connected, info ->
+    // connected 为 true 时，info 为当前连接信息
+}
 
-    override fun onWifiDisconnected(info: WifiConnectionInfo?) {
-        // 已断开 Wi-Fi，info 为断开前的连接快照
-    }
-})
+stateMonitor.register()
+connectionMonitor.register()
 ```
 
 页面销毁时记得注销监听：
 
 ```kotlin
-observer.unregister()
+stateMonitor.unregister()
+connectionMonitor.unregister()
 ```
 
 ---
 
 ## 五、版本变更记录
+
+### V2.2.0 (2026-08-12)
+- ✨ feat: 拆分 Wi-Fi 开关状态与连接状态监听
+- 🦄 refactor: 弃用原有合一式状态监听器
 
 ### V2.1.0 (2026-08-04)
 - 📦 deps: 升级安卓设备状态核心库版本至 V3.0.0
